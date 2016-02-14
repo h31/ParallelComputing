@@ -5,9 +5,9 @@
 using namespace std;
 
 int main() {
-    const char* text = loadTextFromFile("book.txt");
+    char* text = loadTextFromFile("book.txt");
 
-    auto counted = countWords(text);
+    auto counted = countWordsParallel(text, strlen(text));
     auto flipped = flipMap<string, int>(counted);
     printStats(flipped);
     return 0;

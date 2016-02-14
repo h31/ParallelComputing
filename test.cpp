@@ -14,7 +14,7 @@ TEST(WordCountTest, ConstStringTest)
             " consectetur. Vestibulum sagittis, dui sit amet sagittis posuere,"
             " augue tellus mollis mauris, id ornare.";
 
-    auto counted = countWords(text);
+    auto counted = countWords(text, strlen(text));
     auto flipped = flipMap<string, int>(counted);
     int wordsTotal = 0;
     for (auto it: flipped) {
@@ -33,7 +33,7 @@ TEST(WordCountTest, FileTest)
 {
     const char* text = loadTextFromFile("book.txt");
 
-    auto counted = countWords(text);
+    auto counted = countWords(text, strlen(text));
     auto flipped = flipMap<string, int>(counted);
 
     wordStatFlipped m = {{20304, "и"},
@@ -43,6 +43,35 @@ TEST(WordCountTest, FileTest)
                          {6453, "на"}};
 
     ASSERT_TRUE(std::equal(m.rbegin(), m.rend(), flipped.rbegin()));
+}
+
+TEST(WordCountParallelTest, FileTest)
+{
+    const char* text = loadTextFromFile("book.txt");
+
+    auto counted = countWordsParallel(text, strlen(text));
+    auto flipped = flipMap<string, int>(counted);
+
+    wordStatFlipped m = {{20304, "и"},
+                         {10198, "в"},
+                         {8428, "не"},
+                         {7822, "что"},
+                         {6453, "на"}};
+
+    ASSERT_TRUE(std::equal(m.rbegin(), m.rend(), flipped.rbegin()));
+}
+
+TEST(WordCountParallelTest, FileParAndSeqTest)
+{
+    const char* text = loadTextFromFile("book.txt");
+
+    auto counted1 = countWords(text, strlen(text));
+    auto flipped1 = flipMap<string, int>(counted1);
+
+    auto counted2 = countWordsParallel(text, strlen(text));
+    auto flipped2 = flipMap<string, int>(counted2);
+
+    ASSERT_TRUE(std::equal(flipped1.rbegin(), flipped1.rend(), flipped2.rbegin()));
 }
 
 int main(int argc, char **argv) {
