@@ -45,11 +45,11 @@ TEST(WordCountTest, FileTest)
     ASSERT_TRUE(std::equal(m.rbegin(), m.rend(), flipped.rbegin()));
 }
 
-TEST(WordCountParallelTest, FileTest)
+TEST(WordCountBlockwiseTest, FileTest)
 {
     const char* text = loadTextFromFile("book.txt");
 
-    auto counted = countWordsParallel(text, strlen(text));
+    auto counted = countWordsBlockwise(text, strlen(text));
     auto flipped = flipMap<string, int>(counted);
 
     wordStatFlipped m = {{20304, "и"},
@@ -61,14 +61,43 @@ TEST(WordCountParallelTest, FileTest)
     ASSERT_TRUE(std::equal(m.rbegin(), m.rend(), flipped.rbegin()));
 }
 
-TEST(WordCountParallelTest, FileParAndSeqTest)
+TEST(WordCountBlockwiseTest, FileParAndSeqTest)
 {
     const char* text = loadTextFromFile("book.txt");
 
     auto counted1 = countWords(text, strlen(text));
     auto flipped1 = flipMap<string, int>(counted1);
 
-    auto counted2 = countWordsParallel(text, strlen(text));
+    auto counted2 = countWordsBlockwise(text, strlen(text));
+    auto flipped2 = flipMap<string, int>(counted2);
+
+    ASSERT_TRUE(std::equal(flipped1.rbegin(), flipped1.rend(), flipped2.rbegin()));
+}
+
+TEST(WordCountOpenMPTest, FileTest)
+{
+    const char* text = loadTextFromFile("book.txt");
+
+    auto counted = countWordsOpenMP(text, strlen(text));
+    auto flipped = flipMap<string, int>(counted);
+
+    wordStatFlipped m = {{20304, "и"},
+                         {10198, "в"},
+                         {8428, "не"},
+                         {7822, "что"},
+                         {6453, "на"}};
+
+    ASSERT_TRUE(std::equal(m.rbegin(), m.rend(), flipped.rbegin()));
+}
+
+TEST(WordCountOpenMPTest, FileParAndSeqTest)
+{
+    const char* text = loadTextFromFile("book.txt");
+
+    auto counted1 = countWords(text, strlen(text));
+    auto flipped1 = flipMap<string, int>(counted1);
+
+    auto counted2 = countWordsOpenMP(text, strlen(text));
     auto flipped2 = flipMap<string, int>(counted2);
 
     ASSERT_TRUE(std::equal(flipped1.rbegin(), flipped1.rend(), flipped2.rbegin()));

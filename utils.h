@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <map>
 #include <string.h>
+#include <assert.h>
 
 using namespace std;
 
@@ -60,7 +61,8 @@ char* loadTextFromFile(const char* path) {
     memset(buffer, '\0', (size_t) lSize);
 
     // copy the file into the buffer:
-    fread(buffer, 1, lSize, file);
+    int r = fread(buffer, 1, lSize, file);
+    assert(r == lSize);
 
     return buffer;
 }
