@@ -5,9 +5,9 @@
 using namespace std;
 
 int main() {
-    char* text = loadTextFromFile("book.txt");
+    pair<const char*, size_t> text = loadTextFromFile("book.txt");
 
-    auto counted = countWordsBlockwise(text, strlen(text));
+    auto counted = countWordsBlockwise(text.first, text.second);
     auto flipped = flipMap<string, int>(counted);
     printStats(flipped);
     return 0;
