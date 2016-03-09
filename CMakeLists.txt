@@ -7,7 +7,9 @@ if (OPENMP_FOUND)
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2 -march=native")
+
+add_definitions(-DWITH_OPENMP)
 
 set(SOURCE_FILES utils.h count.h)
 add_executable(lab1 main.cpp ${SOURCE_FILES})
