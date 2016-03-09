@@ -44,7 +44,7 @@ void printStats(wordStatFlipped stat) {
     }
 }
 
-char* loadTextFromFile(const char* path) {
+std::pair<const char*, size_t> loadTextFromFile(const char* path) {
     FILE*file = fopen(path, "r");
     if (file == NULL) {
         perror("File error");
@@ -61,10 +61,9 @@ char* loadTextFromFile(const char* path) {
     memset(buffer, '\0', (size_t) lSize);
 
     // copy the file into the buffer:
-    int r = fread(buffer, 1, lSize, file);
-    assert(r == lSize);
+    size_t r = fread(buffer, 1, lSize, file);
 
-    return buffer;
+    return make_pair(buffer, r);
 }
 
 #endif //LAB1_UTILS_H

@@ -31,9 +31,9 @@ TEST(WordCountTest, ConstStringTest)
 
 TEST(WordCountTest, FileTest)
 {
-    const char* text = loadTextFromFile("book.txt");
+    pair<const char*, size_t> text = loadTextFromFile("book.txt");
 
-    auto counted = countWords(text, strlen(text));
+    auto counted = countWords(text.first, text.second);
     auto flipped = flipMap<string, int>(counted);
 
     wordStatFlipped m = {{20304, "и"},
@@ -47,9 +47,9 @@ TEST(WordCountTest, FileTest)
 
 TEST(WordCountBlockwiseTest, FileTest)
 {
-    const char* text = loadTextFromFile("book.txt");
+    pair<const char*, size_t> text = loadTextFromFile("book.txt");
 
-    auto counted = countWordsBlockwise(text, strlen(text));
+    auto counted = countWordsBlockwise(text.first, text.second);
     auto flipped = flipMap<string, int>(counted);
 
     wordStatFlipped m = {{20304, "и"},
@@ -63,12 +63,12 @@ TEST(WordCountBlockwiseTest, FileTest)
 
 TEST(WordCountBlockwiseTest, FileParAndSeqTest)
 {
-    const char* text = loadTextFromFile("book.txt");
+    pair<const char*, size_t> text = loadTextFromFile("book.txt");
 
-    auto counted1 = countWords(text, strlen(text));
+    auto counted1 = countWords(text.first, text.second);
     auto flipped1 = flipMap<string, int>(counted1);
 
-    auto counted2 = countWordsBlockwise(text, strlen(text));
+    auto counted2 = countWordsBlockwise(text.first, text.second);
     auto flipped2 = flipMap<string, int>(counted2);
 
     ASSERT_TRUE(std::equal(flipped1.rbegin(), flipped1.rend(), flipped2.rbegin()));
@@ -78,9 +78,9 @@ TEST(WordCountBlockwiseTest, FileParAndSeqTest)
 
 TEST(WordCountOpenMPTest, FileTest)
 {
-    const char* text = loadTextFromFile("book.txt");
+    pair<const char*, size_t> text = loadTextFromFile("book.txt");
 
-    auto counted = countWordsOpenMP(text, strlen(text));
+    auto counted = countWordsOpenMP(text.first, text.second);
     auto flipped = flipMap<string, int>(counted);
 
     wordStatFlipped m = {{20304, "и"},
@@ -94,12 +94,12 @@ TEST(WordCountOpenMPTest, FileTest)
 
 TEST(WordCountOpenMPTest, FileParAndSeqTest)
 {
-    const char* text = loadTextFromFile("book.txt");
+    pair<const char*, size_t> text = loadTextFromFile("book.txt");
 
-    auto counted1 = countWords(text, strlen(text));
+    auto counted1 = countWords(text.first, text.second);
     auto flipped1 = flipMap<string, int>(counted1);
 
-    auto counted2 = countWordsOpenMP(text, strlen(text));
+    auto counted2 = countWordsOpenMP(text.first, text.second);
     auto flipped2 = flipMap<string, int>(counted2);
 
     ASSERT_TRUE(std::equal(flipped1.rbegin(), flipped1.rend(), flipped2.rbegin()));
