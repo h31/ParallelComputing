@@ -77,8 +77,8 @@ stats doBench(std::function<void ()> functor) {
 int main() {
     pair<const char*, size_t> text = loadTextFromFile("book.txt");
 
-    ofstream mpPlotData("mpPlotData.txt");
-    ofstream pthPlotData("pthPlotData.txt");
+    ofstream mpPlotData("stats/mpPlotData.txt");
+    ofstream pthPlotData("stats/pthPlotData.txt");
 
     stats sequential = doBench([&text]() {
         countWords(text.first, text.second);

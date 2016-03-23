@@ -10,9 +10,9 @@ set output 'plotMp.pdf'
 set grid ytics
 set grid xtics
 
-plot "../mpPlotData.txt" title "OpenMP" with yerrorbars, "" notitle
+plot "../stats/mpPlotData.txt" title "OpenMP" with yerrorbars, "" notitle
 set output 'plotPth.pdf'
-plot "../pthPlotData.txt" title "Pthreads" with yerrorbars, "" notitle
+plot "../stats/pthPlotData.txt" title "Pthreads" with yerrorbars, "" notitle
 set output 'plotAll.pdf'
-plot "../mpPlotData.txt" using 1:2 title "OpenMP", \
-     "../pthPlotData.txt" using 1:2 title "Pthreads"
+plot "../stats/mpPlotData.txt" using 1:2 title "OpenMP", \
+     "../stats/pthPlotData.txt" using 1:2 title "Pthreads"
