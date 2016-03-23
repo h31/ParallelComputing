@@ -5,6 +5,12 @@
 #include "gtest/gtest.h"
 #include "count.h"
 
+#ifdef WITH_OPENMP
+const int defaultThreadCount = omp_get_num_procs();
+#else
+const int defaultThreadCount = std::thread::hardware_concurrency();
+#endif
+
 TEST(WordCountTest, ConstStringTest)
 {
     const char* text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
@@ -49,7 +55,7 @@ TEST(WordCountBlockwiseTest, FileTest)
 {
     pair<const char*, size_t> text = loadTextFromFile("book.txt");
 
-    auto counted = countWordsBlockwise(text.first, text.second);
+    auto counted = countWordsBlockwise(text.first, text.second, defaultThreadCount);
     auto flipped = flipMap<string, int>(counted);
 
     wordStatFlipped m = {{20304, "и"},
@@ -68,7 +74,7 @@ TEST(WordCountBlockwiseTest, FileParAndSeqTest)
     auto counted1 = countWords(text.first, text.second);
     auto flipped1 = flipMap<string, int>(counted1);
 
-    auto counted2 = countWordsBlockwise(text.first, text.second);
+    auto counted2 = countWordsBlockwise(text.first, text.second, defaultThreadCount);
     auto flipped2 = flipMap<string, int>(counted2);
 
     ASSERT_TRUE(std::equal(flipped1.rbegin(), flipped1.rend(), flipped2.rbegin()));
@@ -80,7 +86,7 @@ TEST(WordCountOpenMPTest, FileTest)
 {
     pair<const char*, size_t> text = loadTextFromFile("book.txt");
 
-    auto counted = countWordsOpenMP(text.first, text.second);
+    auto counted = countWordsOpenMP(text.first, text.second, defaultThreadCount);
     auto flipped = flipMap<string, int>(counted);
 
     wordStatFlipped m = {{20304, "и"},
@@ -99,7 +105,7 @@ TEST(WordCountOpenMPTest, FileParAndSeqTest)
     auto counted1 = countWords(text.first, text.second);
     auto flipped1 = flipMap<string, int>(counted1);
 
-    auto counted2 = countWordsOpenMP(text.first, text.second);
+    auto counted2 = countWordsOpenMP(text.first, text.second, defaultThreadCount);
     auto flipped2 = flipMap<string, int>(counted2);
 
     ASSERT_TRUE(std::equal(flipped1.rbegin(), flipped1.rend(), flipped2.rbegin()));
@@ -111,7 +117,7 @@ TEST(WordCountPthreadsTest, FileTest)
 {
     pair<const char*, size_t> text = loadTextFromFile("book.txt");
 
-    auto counted = countWordsPthreads(text.first, text.second);
+    auto counted = countWordsPthreads(text.first, text.second, defaultThreadCount);
     auto flipped = flipMap<string, int>(counted);
 
     wordStatFlipped m = {{20304, "и"},
@@ -130,7 +136,7 @@ TEST(WordCountPthreadsTest, FileParAndSeqTest)
     auto counted1 = countWords(text.first, text.second);
     auto flipped1 = flipMap<string, int>(counted1);
 
-    auto counted2 = countWordsPthreads(text.first, text.second);
+    auto counted2 = countWordsPthreads(text.first, text.second, defaultThreadCount);
     auto flipped2 = flipMap<string, int>(counted2);
 
     ASSERT_TRUE(std::equal(flipped1.rbegin(), flipped1.rend(), flipped2.rbegin()));

@@ -9,13 +9,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <omp.h>
+#include <thread>
 #include "utils.h"
-
-#ifdef WITH_OPENMP
-const int threadCount = omp_get_num_procs();
-#else
-const int threadCount = 4;
-#endif
 
 void* countThread(void* arg);
 
@@ -36,10 +31,11 @@ wordStat countWords(const char* text, size_t len) {
         stat[pch] = prevCount + 1;
         pch = strtok_r(NULL, delim, &saveptr);
     }
+    delete workArray;
     return stat;
 }
 
-wordStat countWordsBlockwise(const char* text, size_t len) {
+wordStat countWordsBlockwise(const char* text, size_t len, int threadCount) {
     wordStat stat;
     vector<size_t> blockStart;
 
@@ -76,7 +72,7 @@ wordStat countWordsBlockwise(const char* text, size_t len) {
 
 #ifdef WITH_OPENMP
 
-wordStat countWordsOpenMP(const char* text, size_t len) {
+wordStat countWordsOpenMP(const char* text, size_t len, int threadCount) {
     wordStat stat;
     vector<size_t> blockStart;
 
@@ -127,7 +123,7 @@ struct threadData {
     pthread_t thread_id;
 };
 
-wordStat countWordsPthreads(const char* text, size_t len) {
+wordStat countWordsPthreads(const char* text, size_t len, int threadCount) {
     wordStat stat;
     vector<size_t> blockStart;
     pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;

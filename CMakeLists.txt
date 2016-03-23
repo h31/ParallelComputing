@@ -29,3 +29,8 @@ add_executable(runTest test.cpp ${SOURCE_FILES})
 # Link test executable against gtest & gtest_main
 target_link_libraries(runTest gtest gtest_main)
 add_test( runTest runTest )
+
+################################
+# Benchmark
+################################
+add_executable(benchmark benchmark.cpp ${SOURCE_FILES})
