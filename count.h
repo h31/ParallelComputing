@@ -37,7 +37,7 @@ wordStat countWords(const char* text, size_t len) {
         stat[pch] = prevCount + 1;
         pch = strtok_r(NULL, delim, &saveptr);
     }
-    delete workArray;
+    delete[] workArray;
     return stat;
 }
 

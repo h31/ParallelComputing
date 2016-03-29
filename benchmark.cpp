@@ -12,7 +12,7 @@
 
 typedef chrono::duration<double, milli> duration;
 
-const int runTimes = 50;
+const int runTimes = 100;
 
 struct stats {
     double durations[runTimes];
@@ -52,7 +52,7 @@ struct stats {
 
     std::string plotFormat(int threadNum) {
         std::stringstream ss;
-        ss << threadNum << " " << mean << " " << margin << endl;
+        ss << threadNum << " " << mean << " " << margin << " " << stDev << endl;
         return ss.str();
     }
 };
