@@ -5,12 +5,6 @@
 #include "gtest/gtest.h"
 #include "count.h"
 
-#ifdef WITH_OPENMP
-const int defaultThreadCount = omp_get_num_procs();
-#else
-const int defaultThreadCount = std::thread::hardware_concurrency();
-#endif
-
 TEST(WordCountTest, ConstStringTest)
 {
     const char* text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."

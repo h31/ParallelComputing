@@ -7,7 +7,7 @@ using namespace std;
 int main() {
     pair<const char*, size_t> text = loadTextFromFile("book.txt");
 
-    auto counted = countWordsBlockwise(text.first, text.second);
+    auto counted = countWordsBlockwise(text.first, text.second, defaultThreadCount);
     auto flipped = flipMap<string, int>(counted);
     printStats(flipped);
     return 0;

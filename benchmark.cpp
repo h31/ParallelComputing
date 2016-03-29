@@ -77,17 +77,17 @@ stats doBench(std::function<void ()> functor) {
 int main() {
     pair<const char*, size_t> text = loadTextFromFile("book.txt");
 
-    ofstream mpPlotData("stats/mpPlotData.txt");
-    ofstream pthPlotData("stats/pthPlotData.txt");
+    ofstream seqPlotData("stats/seq.txt");
+    ofstream mpPlotData("stats/openmp.txt");
+    ofstream pthPlotData("stats/pthreads.txt");
 
     stats sequential = doBench([&text]() {
         countWords(text.first, text.second);
     });
     sequential.print("sequential", 1);
-    mpPlotData << sequential.plotFormat(1);
-    pthPlotData << sequential.plotFormat(1);
 
-    std:array<int, 3> threadCases = {2, 4, 8};
+    std:array<int, 8> threadCases;
+    std::iota(threadCases.begin(), threadCases.end(), 1);
     for (int threadNum: threadCases) {
         stats openMP = doBench([&text, threadNum]() {
             countWordsOpenMP(text.first, text.second, threadNum);
@@ -100,6 +100,9 @@ int main() {
         });
         pthread.print("pthread", threadNum);
         pthPlotData << pthread.plotFormat(threadNum);
+
+        seqPlotData << threadNum << " " << sequential.mean/threadNum
+        << " " << sequential.margin/threadNum << endl;
     }
 
     auto counted = countWordsOpenMP(text.first, text.second, 8);

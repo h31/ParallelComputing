@@ -12,6 +12,12 @@
 #include <thread>
 #include "utils.h"
 
+#ifdef WITH_OPENMP
+const int defaultThreadCount = omp_get_num_procs();
+#else
+const int defaultThreadCount = std::thread::hardware_concurrency();
+#endif
+
 void* countThread(void* arg);
 
 wordStat countWords(const char* text, size_t len) {
