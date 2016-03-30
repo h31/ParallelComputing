@@ -41,15 +41,16 @@ wordStat countWords(const char* text, size_t len) {
     return stat;
 }
 
-wordStat countWordsBlockwise(const char* text, size_t len, int threadCount) {
+wordStat countWordsBlockwise(const char* text, size_t len, int blockCount) {
     wordStat stat;
     vector<size_t> blockStart;
 
-    size_t blockSize = len / threadCount + 1;
+    size_t blockSize = len / blockCount + 1;
     size_t startPos = 0;
     size_t endPos;
 
-    for (int i = 0; i < threadCount; i++) {
+    // Fix borders
+    for (int i = 0; i < blockCount; i++) {
         blockStart.push_back(startPos);
         endPos = startPos + blockSize;
         while (true) {
@@ -64,10 +65,12 @@ wordStat countWordsBlockwise(const char* text, size_t len, int threadCount) {
         }
     }
 
-    for (int i = 0; i < threadCount; i++) {
+    for (int i = 0; i < blockCount; i++) {
         startPos = blockStart[i];
-        endPos = i == (threadCount-1) ? len : blockStart[i + 1];
+        endPos = i == (blockCount-1) ? len : blockStart[i + 1];
+        // Run countWords
         auto localMap = countWords(text + startPos, endPos - startPos);
+        // Merge results
         for (auto& it: localMap) {
             int prevCount = stat.count(it.first) ? stat[it.first] : 0;
             stat[it.first] = prevCount + it.second;
