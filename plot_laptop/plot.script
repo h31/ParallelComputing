@@ -1,0 +1,19 @@
+set terminal pdfcairo dashed size 5in, 4in
+set key right top
+set style data lines
+set xlabel "Количество потоков" 
+set ylabel "Время, мс"
+set xrange [0:9]
+set yrange [0:]
+set output 'plotMp.pdf'
+
+set grid ytics
+set grid xtics
+
+plot "../stats_laptop/openmp.txt" using 1:2:3 title "OpenMP" with yerrorbars, "" notitle
+set output 'plotPth.pdf'
+plot "../stats_laptop/pthreads.txt" using 1:2:3 title "Pthreads" with yerrorbars, "" notitle
+set output 'plotAll.pdf'
+plot "../stats_laptop/openmp.txt" using 1:2 title "OpenMP", \
+     "../stats_laptop/pthreads.txt" using 1:2 title "Pthreads", \
+     "../stats_laptop/seq.txt" using 1:2 title "Ideal"

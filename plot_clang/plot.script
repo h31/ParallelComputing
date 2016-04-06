@@ -1,4 +1,4 @@
-set terminal pdfcairo dashed size 4in, 4in
+set terminal pdfcairo dashed size 5in, 4in
 set key right top
 set style data lines
 set xlabel "Количество потоков" 
@@ -10,10 +10,10 @@ set output 'plotMp.pdf'
 set grid ytics
 set grid xtics
 
-plot "../stats/openmp.txt" title "OpenMP" with yerrorbars, "" notitle
+plot "../stats_clang/openmp.txt" using 1:2:3 title "OpenMP" with yerrorbars, "" notitle
 set output 'plotPth.pdf'
-plot "../stats/pthreads.txt" title "Pthreads" with yerrorbars, "" notitle
+plot "../stats_clang/pthreads.txt" using 1:2:3 title "Pthreads" with yerrorbars, "" notitle
 set output 'plotAll.pdf'
-plot "../stats/openmp.txt" using 1:2 title "OpenMP", \
-     "../stats/pthreads.txt" using 1:2 title "Pthreads", \
-     "../stats/seq.txt" using 1:2 title "Ideal"
+plot "../stats_clang/openmp.txt" using 1:2 title "OpenMP", \
+     "../stats_clang/pthreads.txt" using 1:2 title "Pthreads", \
+     "../stats_clang/seq.txt" using 1:2 title "Ideal"
