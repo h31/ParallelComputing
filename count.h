@@ -174,6 +174,7 @@ wordStat countWordsPthreads(const char* text, size_t len, int threadCount) {
     for (int i = 0; i < threadCount; i++) {
         pthread_join(data[i].thread_id, NULL);
     }
+    pthread_mutex_destroy(&mutex);
 
     return stat;
 }
